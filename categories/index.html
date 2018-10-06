@@ -270,13 +270,13 @@
     
 	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
 	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	<script src="/js/md5.min.js"></script>
 		<script>
-			var md5 = require('md5');
 			var gitalk = new Gitalk({
 				clientID:  '4eea597bd29f97b053c0',
 				clientSecret: '581f5a38ca20b566d80cedf36c7fc31c6e339348',
 				repo: 'cavenzep.github.io',
-				id: md5(location.pathname),
+				id: md5(window.location.pathname),
 				owner: 'cavenzep',
 				admin: 'cavenzep',
 				distractionFreeMode: 'true',
