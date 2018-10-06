@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Java与设计模式-02职责型模式 | Zhu.玖羚の个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="介绍balabala… 单例（Singleton）模式场景单例模式的意图是为了确保一个类有且仅有一个实例，并为它提供一个全局访问点。单例模式通过隐藏构造函数来提供创建对象的唯一入口，从而将类的职责集中在类的单个实例中。">
+<meta name="keywords" content="Java,Java与设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java与设计模式-02职责型模式">
+<meta property="og:url" content="http://cavenzep.github.io/2017/03/27/Java与设计模式-02职责型模式/index.html">
+<meta property="og:site_name" content="Zhu.玖羚の个人博客">
+<meta property="og:description" content="介绍balabala… 单例（Singleton）模式场景单例模式的意图是为了确保一个类有且仅有一个实例，并为它提供一个全局访问点。单例模式通过隐藏构造函数来提供创建对象的唯一入口，从而将类的职责集中在类的单个实例中。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-05T17:30:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java与设计模式-02职责型模式">
+<meta name="twitter:description" content="介绍balabala… 单例（Singleton）模式场景单例模式的意图是为了确保一个类有且仅有一个实例，并为它提供一个全局访问点。单例模式通过隐藏构造函数来提供创建对象的唯一入口，从而将类的职责集中在类的单个实例中。">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-brands.min.css">
+    <link rel="stylesheet" href="/libs/font-awesome5/css/fa-solid.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                
+                <span class="site-title">Zhu.玖羚の个人博客</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar-cavenzep.png" />
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fas fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile" class="profile-fixed">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar-cavenzep.png" />
+            <h2 id="name">Zhu.玖羚</h2>
+            <h3 id="title">悟已往之不谏 知来者之可追</h3>
+            <span id="location"><i class="fas fa-map-marker-alt" style="padding-right: 5px"></i>Beijing, China</span>
+            <a id="follow" target="_blank" href="https://github.com/cavenzep/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                3
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                2
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/cavenzep/" target="_blank" title="github" class=tooltip>
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Java与设计模式-02职责型模式" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Java与设计模式-02职责型模式
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fas fa-calendar-alt"></i>
+        <a href="/2017/03/27/Java与设计模式-02职责型模式/">
+            <time datetime="2017-03-27T12:53:58.000Z" itemprop="datePublished">2017-03-27</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fas fa-folder"></i>
+        <a class="article-category-link" href="/categories/读书笔记/">读书笔记</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>balabala…</p>
+<h2 id="单例（Singleton）模式"><a href="#单例（Singleton）模式" class="headerlink" title="单例（Singleton）模式"></a>单例（Singleton）模式</h2><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>单例模式的意图是为了确保一个类有且仅有一个实例，并为它提供一个全局访问点。单例模式通过隐藏构造函数来提供创建对象的唯一入口，从而将类的职责集中在类的单个实例中。<a id="more"></a></p>
+<h3 id="单例模式机制"><a href="#单例模式机制" class="headerlink" title="单例模式机制"></a>单例模式机制</h3><p>单例模式的机制比其意图更加容易记忆，单例模式下创建单例对象的实际有两种：及时和延时。单例模式的主要意图就是保证其他开发人员不能创建该单例对象的新实例。</p>
+<h3 id="单例与线程"><a href="#单例与线程" class="headerlink" title="单例与线程"></a>单例与线程</h3><p>在多线程环境下实现延时创建单例对象，需要小心处理多线程访问控制。</p>
+<h3 id="单例模式实现方式"><a href="#单例模式实现方式" class="headerlink" title="单例模式实现方式"></a>单例模式实现方式</h3><ol>
+<li>恶汉式，顾名思义就是JVM一加载就实例化对象；</li>
+<li>懒汉式，相较于恶汉式，延迟了对象的实例化时机，在对一次获取实例的时候才实例化对象；</li>
+<li><p>升级版懒汉式，使用volatile加双重锁检测来保证多线程环境下单例模式的安全和性能，示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//先检查实例是否存在，如果不存在才进入下面的同步块</span></span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="comment">//同步块，线程安全的创建实例</span></span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="comment">//再次检查实例是否存在，如果不存在才真正的创建实例</span></span><br><span class="line">                <span class="keyword">if</span>(instance == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>枚举式单例，借助枚举的特殊性来实现的单例模式，示例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Singleton &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 定义一个枚举的元素，它就代表了Singleton的一个实例。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    uniqueInstance;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 单例可以有自己的操作</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">singletonOperation</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//功能处理</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="观察者（Observer）模式"><a href="#观察者（Observer）模式" class="headerlink" title="观察者（Observer）模式"></a>观察者（Observer）模式</h2><h3 id="场景-1"><a href="#场景-1" class="headerlink" title="场景"></a>场景</h3><p>观察者模式的意图是在多个对象之间定义一对多的依赖关系，当一个对象的状态发生改变时，会通知依赖于它的对象，并根据新状态做出相应的反应。</p>
+<h3 id="模式角色"><a href="#模式角色" class="headerlink" title="模式角色"></a>模式角色</h3><ol>
+<li><strong>抽象主题(AbstractSubject)</strong>角色：抽象主题角色把所有对观察者对象的引用保存在一个聚集（比如ArrayList对象）里，每个主题都可以有任何数量的观察者。抽象主题提供一个接口，可以增加和删除观察者对象，抽象主题角色又叫做抽象被观察者(Observable)角色。</li>
+<li><strong>具体主题(ConcreteSubject)</strong>角色：将有关状态存入具体观察者对象；在具体主题的内部状态改变时，给所有登记过的观察者发出通知。具体主题角色又叫做具体被观察者(Concrete Observable)角色。</li>
+<li><strong>抽象观察者(Observer)</strong>角色：为所有的具体观察者定义一个接口，在得到主题的通知时更新自己，这个接口叫做更新接口。</li>
+<li><strong>具体观察者(ConcreteObserver)</strong>角色：存储与主题的状态自恰的状态。具体观察者角色实现抽象观察者角色所要求的更新接口，以便使本身的状态与主题的状态 像协调。如果需要，具体观察者角色可以保持一个指向具体主题对象的引用。</li>
+</ol>
+<h3 id="推模型和拉模型"><a href="#推模型和拉模型" class="headerlink" title="推模型和拉模型"></a>推模型和拉模型</h3><p>在观察者模式中，又分为推模型和拉模型两种方式。</p>
+<ol>
+<li>推模型<br>主题对象向观察者推送主题的详细信息，不管观察者是否需要，推送的信息通常是主题对象的全部或部分数据。</li>
+<li>拉模型<br>主题对象在通知观察者的时候，只传递少量信息。如果观察者需要更具体的信息，由观察者主动到主题对象中获取，相当于是观察者从主题对象中拉数据。一般这种模型的实现中，会把主题对象自身通过update()方法传递给观察者，这样在观察者需要获取数据的时候，就可以通过这个引用来获取了。</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Java GUI类库是典型的观察者模式范例。Java类库中java.util包中提供了Observable类和Observer接口，以此来支持观察者模式的设计。</p>
+<h2 id="调停者（Mediator）模式"><a href="#调停者（Mediator）模式" class="headerlink" title="调停者（Mediator）模式"></a>调停者（Mediator）模式</h2><h3 id="场景-2"><a href="#场景-2" class="headerlink" title="场景"></a>场景</h3><p>调停者模式的意图是定义一个对象，封装一组对象的交互，从而降低对象间的耦合度，避免对象间的显示引用，并且可以独立的改变对象的行为。</p>
+<h3 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h3><ol>
+<li><strong>抽象调停者(Mediator)</strong>角色：定义出同事对象到调停者对象的接口，其中主要方法是一个（或多个）事件方法。</li>
+<li><strong>具体调停者(ConcreteMediator)</strong>角色：实现了抽象调停者所声明的事件方法。具体调停者知晓所有的具体同事类，并负责具体的协调各同事对象的交互关系。</li>
+<li><strong>抽象同事类(Colleague)</strong>角色：定义出调停者到同事对象的接口。同事对象只知道调停者而不知道其余的同事对象。</li>
+<li><strong>具体同事类(ConcreteColleague)</strong>角色：所有的具体同事类均从抽象同事类继承而来。实现自己的业务，在需要与其他同事通信的时候，就与持有的调停者通信，调停者会负责与其他的同事交互。</li>
+</ol>
+<h2 id="代理（Proxy）模式"><a href="#代理（Proxy）模式" class="headerlink" title="代理（Proxy）模式"></a>代理（Proxy）模式</h2><h3 id="场景-3"><a href="#场景-3" class="headerlink" title="场景"></a>场景</h3><p>代理模式的意图是提供一个代理或者占位符来控制对目标对象的访问。</p>
+<ol>
+<li>静态代理：程序运行之前代理类就存在，代理类是在编码阶段就写好的；</li>
+<li>动态代理：程序运行中才生产代理类，代理类由JVM动态生成。</li>
+</ol>
+<h3 id="角色-1"><a href="#角色-1" class="headerlink" title="角色"></a>角色</h3><ol>
+<li><strong>抽象对象</strong>角色：声明了目标对象和代理对象的共同接口，这样一来在任何可以使用目标对象的地方都可以使用代理对象。</li>
+<li><strong>目标对象</strong>角色：定义了代理对象所代表的目标对象。</li>
+<li><strong>代理对象</strong>角色：代理对象内部含有目标对象的引用，从而可以在任何时候操作目标对象；代理对象提供一个与目标对象相同的接口，以便可以在任何时候替代目标对象。代理对象通常在客户端调用传递给目标对象之前或之后，执行某个操作，而不是单纯地将调用传递给目标对象。</li>
+</ol>
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>静态代理中，代理类只能代理一个类，并且这个类实在编码阶段就已经写定的。如果需要改变代理类所代理的目标类，但是在目标类方法执行前后要完成一样的操作（铁打的代理类，流水的被代理类），可以采用动态代理，Java已经为实现动态代理提供了一套比较方便的工具。</p>
+<ul>
+<li><p>java.lang.reflect.Proxy类中可以动态生成代理对象的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *返回实现了指定接口的对象，调用代理对象的方法会调用 </span></span><br><span class="line"><span class="comment"> *InvocationHandler的invoke方法</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>   loader 获取代理类所使用的类加载器</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>   interfaces 代理类所要实现的接口</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>   handler 实现了InvocationHandler接口的对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span>  代理对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">newProxyInstance</span><span class="params">(ClassLoader loader,Class&lt;?&gt;[] interfaces, InvocationHandler handler)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>InvocationHandler接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *每个代理类都有一个关联的InvocationHandler</span></span><br><span class="line"><span class="comment"> *当代理对象执行一个方法的时候会直接执行invoke方法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>   调用该方法的代理对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>   method 代理对象所调用的方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>   args 调用的方法的参数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span>  调用的方法的返回值</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span></span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="职责链（Chain-of-Responsibility）模式"><a href="#职责链（Chain-of-Responsibility）模式" class="headerlink" title="职责链（Chain of Responsibility）模式"></a>职责链（Chain of Responsibility）模式</h2><h3 id="场景-4"><a href="#场景-4" class="headerlink" title="场景"></a>场景</h3><p>职责链模式的目的是通过给予多个对象处理请求的机会，以解除请求的发送者和接受者间的耦合。</p>
+<h3 id="角色-2"><a href="#角色-2" class="headerlink" title="角色"></a>角色</h3><ol>
+<li><strong>抽象处理者(Handler)</strong>角色：定义出一个处理请求的接口。如果需要，接口可以定义 出一个方法以设定和返回对下家的引用。这个角色通常由一个Java抽象类或者Java接口实现。上图中Handler类的聚合关系给出了具体子类对下家的引用，抽象方法handleRequest()规范了子类处理请求的操作。</li>
+<li><strong>具体处理者(ConcreteHandler)</strong>角色：具体处理者接到请求后，可以选择将请求处理掉，或者将请求传给下家。由于具体处理者持有对下家的引用，因此，如果需要，具体处理者可以访问下家。</li>
+</ol>
+<h2 id="享元（Flyweight）模式"><a href="#享元（Flyweight）模式" class="headerlink" title="享元（Flyweight）模式"></a>享元（Flyweight）模式</h2><h3 id="场景-5"><a href="#场景-5" class="headerlink" title="场景"></a>场景</h3><p>享元模式的意图是通过共享来有效的支持大量细粒度的对象。<br>享元模式可以分成<strong>单纯享元模式</strong>和<strong>复合享元模式</strong>。</p>
+<h3 id="享元模式的结构"><a href="#享元模式的结构" class="headerlink" title="享元模式的结构"></a>享元模式的结构</h3><p>享元模式采用一个共享来避免大量拥有相同内容对象的开销。这种开销最常见、最直观的就是内存的损耗。享元对象能做到共享的关键是区分<strong>内蕴状态(Internal State)</strong>和<strong>外蕴状态(External State)</strong>。</p>
+<ol>
+<li><strong>内蕴状态</strong>是存储在享元对象内部的，并且是不会随环境的改变而有所不同。因此，一个享元可以具有内蕴状态并可以共享。</li>
+<li><strong>外蕴状态</strong>是随环境的改变而改变的、不可以共享的。享元对象的外蕴状态必须由客户端保存，并在享元对象被创建之后，在需要使用的时候再传入到享元对象内部。外蕴状态不可以影响享元对象的内蕴状态，它们是相互独立的。</li>
+</ol>
+<h3 id="单纯享元模式"><a href="#单纯享元模式" class="headerlink" title="单纯享元模式"></a>单纯享元模式</h3><ol>
+<li><strong>抽象享元(Flyweight)</strong>角色：给出一个抽象接口，以规定出所有具体享元角色需要实现的方法。<br>2 <strong>具体享元(ConcreteFlyweight)</strong>角色：实现抽象享元角色所规定出的接口。如果有内蕴状态的话，必须负责为内蕴状态提供存储空间。</li>
+<li><strong>享元工厂(FlyweightFactory)</strong>角色：本角色负责创建和管理享元角色。本角色必须保证享元对象可以被系统适当地共享。当一个客户端对象调用一个享元对象的时候，享元工厂角色会检查系统中是否已经有一个符合要求的享元对象。如果已经有了，享元工厂角色就应当提供这个已有的享元对象；如果系统中没有一个适当的享元对象的话，享元工厂角色就应当创建一个合适的享元对象。</li>
+</ol>
+<h3 id="复合享元模式"><a href="#复合享元模式" class="headerlink" title="复合享元模式"></a>复合享元模式</h3><ol>
+<li><strong>抽象享元(Flyweight)</strong>角色：给出一个抽象接口，以规定出所有具体享元角色需要实现的方法。</li>
+<li><strong>具体享元(ConcreteFlyweight)</strong>角色：实现抽象享元角色所规定出的接口。如果有内蕴状态的话，必须负责为内蕴状态提供存储空间。</li>
+<li><strong>复合享元(ConcreteCompositeFlyweight)</strong>角色：复合享元角色所代表的对象是不可以共享的，但是一个复合享元对象可以分解成为多个本身是单纯享元对象的组合。复合享元角色又称作不可共享的享元对象。</li>
+<li><strong>享元工厂(FlyweightFactory)</strong>角色：本角色负责创建和管理享元角色。本角色必须保证享元对象可以被系统适当地共享。当一个客户端对象调用一个享元对象的时候，享元工厂角色会检查系统中是否已经有一个符合要求的享元对象。如果已经有了，享元工厂角色就应当提供这个已有的享元对象；如果系统中没有一个适当的享元对象的话，享元工厂角色就应当创建一个合适的享元对象。</li>
+</ol>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>享元模式的优点在于它<strong>大幅度地降低内存中对象的数量</strong>。但是，它做到这一点所付出的代价也是很高的：</p>
+<ol>
+<li>享元模式使得系统更加复杂。为了使对象可以共享，需要将一些状态外部化，这使得程序的逻辑复杂化。</li>
+<li>享元模式将享元对象的状态外部化，而读取外部状态使得运行时间稍微变长。</li>
+</ol>
+
+        
+        </div>
+        <footer class="article-footer">
+            
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Java/">Java</a>, <a class="tag-link" href="/tags/Java与设计模式/">Java与设计模式</a>
+    </div>
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/03/18/Java与设计模式-01接口型模式/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Java与设计模式-01接口型模式</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+        <section id="comments">
+	<div id="gitalk-container"></div>
+</section>
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/读书笔记/">读书笔记</a></p>
+                            <p class="item-title"><a href="/2017/03/27/Java与设计模式-02职责型模式/" class="title">Java与设计模式-02职责型模式</a></p>
+                            <p class="item-date"><time datetime="2017-03-27T12:53:58.000Z" itemprop="datePublished">2017-03-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/读书笔记/">读书笔记</a></p>
+                            <p class="item-title"><a href="/2017/03/18/Java与设计模式-01接口型模式/" class="title">Java与设计模式-01接口型模式</a></p>
+                            <p class="item-date"><time datetime="2017-03-18T14:42:52.000Z" itemprop="datePublished">2017-03-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/读书笔记/">读书笔记</a></p>
+                            <p class="item-title"><a href="/2017/03/16/Java与设计模式-00绪论/" class="title">Java与设计模式-00绪论</a></p>
+                            <p class="item-date"><time datetime="2017-03-16T12:56:39.000Z" itemprop="datePublished">2017-03-16</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a><span class="category-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java与设计模式/" style="font-size: 10px;">Java与设计模式</a>
+        </div>
+    </div>
+
+    
+    <div id="toTop" class="fas fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 - 2018 Zhu.玖羚 版权所有<br>
+        </div>
+    </div>
+</footer>
+        
+    
+	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+		<script>
+			var gitalk = new Gitalk({
+			  clientID:  '4eea597bd29f97b053c0',
+			  clientSecret: '581f5a38ca20b566d80cedf36c7fc31c6e339348',
+			  repo: 'cavenzep.github.io',
+			  id: window.location.pathname,
+			  owner: 'cavenzep',
+			  admin: 'cavenzep',
+			  distractionFreeMode: 'true',
+		 })
+		gitalk.render('gitalk-container')
+		</script>
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
